@@ -1,2 +1,2 @@
 # recsys-with-pre-training-stage
-# recsys-with-pre-training-stage
+Recommandation System with a Pre-Training Stage Based on Neural Networks for Event Sequence Processing
