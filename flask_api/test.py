@@ -183,20 +183,8 @@ print("Preprocessing data...")
 dataset.preprocess(15, 20001)
 data_examples, user_history, num_bins = load_dataset_timestamp(dataset.users, 128, 100)
 
-# with open('flask_api/sectors.pkl', 'rb') as f:
-#     sectors = pickle.load(f)
-
-# sectors = {}
-# for i in range(dataset.sectors.shape[0]):
-#   sectors[dataset.sectors.loc[i, 'location_id_bin']] = dataset.sectors.loc[i, 'place']
-
 header = {'Accept': 'application/json'}
-# test_data = {'items': [24, 35, 35, 35, 173, 173, 173, 173, 173, 185, 185, 35],
-#  'timestamps': [9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
-#  'seq_len': 12,
-#  'user': 1}
-# test_data["sectors"] = sectors
-#data_examples[1]["sectors"] = sectors
+
 print("Sent the request")
 resp = requests.post("http://0.0.0.0:8000/predict", \
                     json = data_examples[1],\
