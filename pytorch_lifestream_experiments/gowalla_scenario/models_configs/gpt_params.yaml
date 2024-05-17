@@ -1,0 +1,69 @@
+defaults:
+  - _self_
+  - dataset_unsupervised/memory_parquet_numbins
+  - inference/default
+  - inference/seq_encoder/pretrained
+
+seed_everything: 42
+logger_name: gpt_model
+model_path: models/gpt_model.p
+embed_file_name: gpt_embeddings
+
+data_module:
+  _target_: ptls.frames.PtlsDataModule
+  train_data:
+    _target_: ptls.frames.gpt.GptDataset
+    max_len: 100
+    min_len: 5
+    data: ${dataset_unsupervised.train}
+  valid_data:
+    _target_: ptls.frames.gpt.GptDataset
+    max_len: 100
+    min_len: 5
+    data: ${dataset_unsupervised.train}
+  train_batch_size: 128
+  train_num_workers: 12
+  valid_batch_size: 128
+  valid_num_workers: 12
+
+trainer:
+  gpus: 0
+  auto_select_gpus: false
+  max_steps: 8000
+  deterministic: false
+  checkpoints_every_n_val_epochs: 10
+  accumulate_grad_batches: 1
+  limit_val_batches: 1000
+  val_check_interval: 55
+  enable_progress_bar: true
+
+pl_module:
+  _target_: ptls.frames.gpt.GptPretrainModule
+  total_steps: ${trainer.max_steps}
+  max_lr: 0.0005
+  norm_predict: false
+  seed_seq_len: 30
+  head_hidden_size: 64
+  inference_pooling_strategy: out
+  seq_encoder:
+    _target_: ptls.nn.GptEncoder
+    n_embd: 128
+    n_layer: 2
+    n_head: 4
+    n_inner: 64
+    n_positions: 2000
+    use_positional_encoding: true
+    use_start_random_shift: true
+    is_reduce_sequence: false
+  trx_encoder: 
+    _target_: ptls.nn.TrxEncoder
+    linear_projection_size: ${pl_module.seq_encoder.n_embd}
+    orthogonal_init: true
+    norm_embeddings: false
+    spatial_dropout: 0.1
+    embeddings_noise: 0.003
+    embeddings: 
+      location_id_bin: 
+        in: 3883
+        
+        out: 128

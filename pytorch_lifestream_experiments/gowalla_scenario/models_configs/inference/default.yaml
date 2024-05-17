@@ -1,0 +1,18 @@
+num_workers: 12
+batch_size: 64
+
+dataset:
+  _target_: ptls.data_load.datasets.ParquetDataset
+  data_files:
+    _target_: ptls.data_load.datasets.ParquetFiles
+    file_path:
+      - data/train_trx.parquet
+  i_filters:
+    - _target_: ptls.data_load.iterable_processing.FeatureFilter
+      keep_feature_names: cl_id
+    - _target_: ptls.data_load.iterable_processing.ISeqLenLimit
+      max_seq_len: 64000
+
+output:
+  path: data/${embed_file_name}
+  format: pickle

@@ -1,0 +1,83 @@
+defaults:
+  - _self_
+  - dataset_unsupervised/parquet
+  - inference/default
+  - inference/seq_encoder/pretrained
+
+seed_everything: 42
+logger_name: mles_model
+model_path: models/mles_model.p
+embed_file_name: mles_embeddings
+
+data_module:
+  _target_: ptls.frames.PtlsDataModule
+  train_data:
+    _target_: ptls.frames.coles.ColesDataset
+    splitter:
+      _target_: ptls.frames.coles.split_strategy.SampleSlices
+      split_count: 3
+      cnt_min: 5
+      cnt_max: 500
+    data: ${dataset_unsupervised.train}
+  valid_data:
+    _target_: ptls.frames.coles.ColesDataset
+    splitter:
+      _target_: ptls.frames.coles.split_strategy.SampleSlices
+      split_count: 3
+      cnt_min: 5
+      cnt_max: 500
+    data: ${dataset_unsupervised.valid}
+  train_batch_size: 32
+  train_num_workers: 8
+  valid_batch_size: 32
+  valid_num_workers: 4
+
+trainer:
+  gpus: 0
+  auto_select_gpus: false
+  max_epochs: 50
+  enable_checkpointing: false
+  deterministic: true
+
+pl_module:
+  _target_: ptls.frames.coles.CoLESModule
+  validation_metric:
+    _target_: ptls.frames.coles.metric.BatchRecallTopK
+    K: 2
+    metric: cosine
+  seq_encoder:
+    _target_: ptls.nn.seq_encoder.RnnSeqEncoder
+    trx_encoder:
+      _target_: ptls.nn.trx_encoder.TrxEncoder
+      use_batch_norm_with_lens: true
+      norm_embeddings: false
+      embeddings_noise: 0.0003
+      embeddings: 
+        location_id_bin: 
+          in: 3883
+          out: 128
+       
+    type: lstm
+    hidden_size: 128
+    bidir: false
+    trainable_starter: static
+  head:
+    _target_: ptls.nn.Head
+    use_norm_encoder: true
+  loss:
+    _target_: ptls.frames.coles.losses.ContrastiveLoss
+    margin: 0.5
+    sampling_strategy:
+      _target_: ptls.frames.coles.sampling_strategies.HardNegativePairSelector
+      neg_count: 5
+  optimizer_partial:
+    _partial_: true
+    _target_: torch.optim.Adam
+    lr: 0.001
+    weight_decay: 0.0
+  lr_scheduler_partial:
+    _partial_: true
+    _target_: torch.optim.lr_scheduler.StepLR
+    step_size: 10
+    gamma: 0.9025
+      

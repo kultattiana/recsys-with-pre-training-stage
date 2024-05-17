@@ -165,8 +165,6 @@ def load_dataset_timestamp(users, n_context, seq_len):
 
         act_seq = act_list[i]
         time_seq = new_time_list[i]
-        print(type(act_seq[0]))
-
 
         entry = {'items': act_seq,
             'timestamps': time_seq,
@@ -184,9 +182,8 @@ dataset.preprocess(15, 20001)
 data_examples, user_history, num_bins = load_dataset_timestamp(dataset.users, 128, 100)
 
 header = {'Accept': 'application/json'}
-
 print("Sent the request")
-resp = requests.post("http://0.0.0.0:8000/predict", \
+resp = requests.post("http://0.0.0.0:5000/predict", \
                     json = data_examples[1],\
                     headers= header)
 print(resp.status_code)
