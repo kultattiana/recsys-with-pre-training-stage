@@ -14,3 +14,4 @@ The project is organized as follows:
 - `pytorch_lifestream_experiments` folder contains pytorch lifestream models configs, data preprocessing with PySpark scripts, commands for launching models and the notebook with experiments on sequences pre-trained embeddings obtained by PyTorch Lifestream models
 - `recommendation_pipeline` notebook contains the pipeline of generating recommendations according to model predictions, specifically for Gowalla dataset
 - `flask_api` folder contains the Flask API wrapper for recommendation pipeline
+- `logs` folder contains txt files with test metrics recorded during the performing of different experiments
