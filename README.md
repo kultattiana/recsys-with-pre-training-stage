@@ -1,5 +1,5 @@
 # recsys-with-pre-training-stage
-Recommendation System with a Pre-Training Stage Based on Neural Networks for Event Sequence Processing
+### Recommendation System with a Pre-Training Stage Based on Neural Networks for Event Sequence Processing
 
 ## The idea
 This work constructs a deep learning model capable of processing event
@@ -10,7 +10,7 @@ and social relationships is added.
 
 ## The structure
 The project is organized as follows:
-- `research` folder consists of notebooks with data load and preprocessing, experiments with graph pre-training and rnn baseline, statistical tests and metrics calculations
-- `pytorch_lifestream_experiments` folder contains configs of pytorch lifestream models, data preprocessing with PySpark, scripts for launching models and the notebook with experiments on sequences pre-trained embeddings obtained by PyTorch Lifestream models
+- `research` folder consists of notebooks with data load and preprocessing scripts, experiments with graph pre-training and rnn baseline, statistical tests and metrics calculations
+- `pytorch_lifestream_experiments` folder contains pytorch lifestream models configs, data preprocessing with PySpark scripts, commands for launching models and the notebook with experiments on sequences pre-trained embeddings obtained by PyTorch Lifestream models
 - `recommendation_pipeline` notebook contains the pipeline of generating recommendations according to model predictions, specifically for Gowalla dataset
 - `flask_api` folder contains the Flask API wrapper for recommendation pipeline
