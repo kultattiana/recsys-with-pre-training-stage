@@ -1,2 +1,14 @@
 # recsys-with-pre-training-stage
 Recommendation System with a Pre-Training Stage Based on Neural Networks for Event Sequence Processing
+
+## The idea
+This work constructs a deep learning model capable of processing event
+sequences and considering users’ connections to predict their
+subsequent actions. Also, a pre-training phase that extracts useful
+representations of spatial-temporal data about users’ behavior
+and social relationships is added.
+
+## The stucture
+The project is organized as follows:
+- 'research' folder consists of notebooks with data load and preprocessing, experiments with graph pre-training and rnn baseline, statistical tests and metrics calculations
+- 'pytorch_lifestream_experiments' folder contains configs of pytorch lifestream models, data preprocessing with PySpark, scripts for launching models and the notebook with experiments on sequences pre-trained embeddings obtained by PyTorch Lifestream models
